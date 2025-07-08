@@ -41,31 +41,29 @@ int length(Node* head) {
     return count;
 }
 
-Node* deleteNode(Node* head, int pos) {
-    if (pos > length(head) || pos < 1) {
-        printf("Loi vi tri xoa\n");
-        return head;
-    }
-    if (head->next == NULL && pos == 1) {
-        free(head);
-        return NULL;
-    }
-    Node* current = head;
-    for (int i = 0; i < pos - 1; i++) {
-        current = current->next;
-    }
-    if (current == head) {
-        head = current->next;
-        if (head != NULL) {
-            head->prev = NULL;
-        }
-    }else {
-       current->prev->next = current->next;
-        if (current->next != NULL) {
-            current->next->prev = current->prev;
+Node* deleteNodeValue(Node* head, int value) {
+   Node* current = head;
+    while (current != NULL) {
+        Node* temp = current;
+        if (current->data == value) {
+            if (current == head) {
+                head = current->next;
+                if (head != NULL) {
+                    head->prev = NULL;
+                }
+            }else {
+               current->prev->next = current->next;
+                if (current->next != NULL) {
+                    current->next->prev = current->prev;
+                }
+            }
+            current = current->next;
+            free(temp);
+        }else {
+            current = current->next;
         }
     }
-    free(current);
+
     return head;
 }
 
@@ -77,16 +75,16 @@ int main() {
     Node* node1 = createNode(3);
     node->next = node1;
     node1->prev = node;
-    Node* node2 = createNode(4);
+    Node* node2 = createNode(5);
     node1->next = node2;
     node2->prev = node1;
     Node* node3 = createNode(5);
     node2->next = node3;
     node3->prev = node2;
     print(head);
-    int pos;
-    scanf("%d", &pos);
-    head = deleteNode(head, pos);
+    int value;
+    scanf("%d", &value);
+    head = deleteNodeValue(head, value);
     print(head);
     return 0;
 }
